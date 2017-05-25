@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.jk.mapper.user.UserMapper">
+
+    <select id="login" parameterType="userRequest" resultType="userResponse">
+        SELECT t_id as "userID",
+        t_account as "userAccount",
+        t_pwd as "userPwd",
+        t_name as "userName",
+        t_age as "userAge",
+        t_sex as "userSex"
+        FROM t_users
+        WHERE t_account = #{userAccount}
+    </select>
+
+    <insert id="insertUser" parameterType="userRequest">
+        <selectKey resultType="int" keyProperty="userID" order="BEFORE">
+            SELECT t_users_seq.nextval as "userID" FROM dual
+        </selectKey>
+        INSERT INTO t_users
+        (t_id, t_account,
+        <if test="null != userName">
+            t_name,
+        </if>
+        t_age,
+        t_sex,
+        t_pwd)
+        VALUES
+        (#{userID}, #{userAccount},
+        <if test="null != userName">
+            #{userName},
+        </if>
+        #{userAge},
+        #{userSex},
+        #{userPwd})
+    </insert>
+
+
+   
+</mapper>
